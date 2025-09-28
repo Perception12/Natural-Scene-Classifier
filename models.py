@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
+from helper import to_device, DeviceDataLoader, get_default_device
 
 def accuracy(outputs, labels):
     _, preds = torch.max(outputs, dim=1)
@@ -70,7 +71,8 @@ class NaturalSceneClassification(ImageClassificationBase):
 
 class Trainer():
     def __init__(self):
-        self.model = NaturalSceneClassification()
+        device = get_default_device()
+        self.model = to_device(NaturalSceneClassification(), device)
         self.history = []
     
     @torch.no_grad()

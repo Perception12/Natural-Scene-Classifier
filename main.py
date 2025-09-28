@@ -1,4 +1,4 @@
-from preprocessing import load_data
+from img_processing import load_data
 from models import Trainer
 from torch import optim
 

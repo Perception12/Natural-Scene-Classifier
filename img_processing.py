@@ -74,12 +74,14 @@ def predict_from_file(path, model):
     # open image file
     img = Image.open(path)
     # convert image to tensor
+    img = transforms.Resize((150, 150))(img)
     img = transforms.ToTensor()(img)
 
     # print image
     img_class = predict_img_class(img, model)
     plt.title(f"Predicted Class : {img_class}")
     plt.imshow(img.permute(1, 2, 0))
+    plt.savefig(f'result/{img_class}.png')
     plt.show()
 
     # prdict image label

@@ -30,8 +30,8 @@ class ImageClassificationBase(nn.Module):
         epoch_acc = torch.stack(batch_accs).mean()  # Mean accuracy
         return {'val_loss': epoch_loss.item(), 'val_acc': epoch_acc.item()}
 
-    def epoch_end(self, epoch, result):
-        print(f"Epoch [{epoch}], train_loss: {result['train_loss']:.4f}, val_loss: {result['val_loss']:.4f}, val_acc: {result['val_acc']:.4f}")
+    def epoch_end(self, epoch, epochs, result):
+        print(f"Epoch {epoch+1}/{epochs} | Train Loss: {result['train_loss']:.4f} | Val Loss: {result['val_loss']:.4f} | Val Acc: {result['val_acc']:.4f}\n")
 
 
 class NaturalSceneClassification(ImageClassificationBase):
@@ -95,9 +95,8 @@ class Trainer():
                 optimizer.zero_grad()
             result = self.evaluate(val_loader)
             result['train_loss'] = torch.stack(train_losses).mean().item()
-            self.model.epoch_end(epoch, result)
+            self.model.epoch_end(epoch, epochs, result)
             self.history.append(result)
-            print(f"Epoch {epoch+1}/{epochs} | Train Loss: {result['train_loss']:.4f} | Val Loss: {result['val_loss']:.4f} | Val Acc: {result['val_acc']:.4f}\n")
         return self.history
     
     def plot_accuracy(self):
